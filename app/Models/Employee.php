@@ -5,11 +5,11 @@ namespace App\Models;
 use App\Blameable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Employee extends Model
 {
-    use HasFactory,SoftDeletes,Blameable;
+    use HasFactory,Blameable;
 
     /**
      * The table associated with the model.
@@ -31,11 +31,26 @@ class Employee extends Model
      *
      * @var array
      */
-    protected $hidden = ['created_at','updated_at','deleted_at','created_by','updated_by'];
+    
+    protected $hidden = ['created_by','updated_by','users','id','users_id'];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['email','name'];
+
     public function leaveBalance(){
         return $this->hasMany(LeaveBalance::class);
     }
     public function users(){
         return $this->belongsTo(User::class,'users_id');
+    }
+    public function getEmailAttribute(){
+        return $this->users->email;
+    }
+    public function getNameAttribute(){
+        return $this->users->name;
     }
 }

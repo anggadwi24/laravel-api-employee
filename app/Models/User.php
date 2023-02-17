@@ -32,6 +32,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
+        
     ];
 
     /**
@@ -43,6 +45,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     public function employee(){
-        return $this->hasOne(Employee::class);
+        return $this->hasOne(Employee::class,'users_id');
+    }
+    public function toDropdown(){
+        return [
+            'id'=>$this->id,
+            'email'=>$this->email,
+        ];
     }
 }

@@ -17,10 +17,12 @@ class CreateLeaveBalanceTable extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->bigInteger('balance');
+            $table->date('dates');
             $table->enum('flow',['out','in']);
             $table->bigInteger('balance_now');
+            $table->boolean('isApprove')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            
         });
     }
 

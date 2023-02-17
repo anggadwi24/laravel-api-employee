@@ -23,9 +23,9 @@ class CreateEmployeeTable extends Migration
             $table->string('pob',100);
             $table->date('dob');
             $table->text('address');
-            $table->bigInteger('balance');
+            $table->bigInteger('balance')->default(0);
             $table->timestamps();
-            $table->softDeletes();
+           
         });
     }
 
