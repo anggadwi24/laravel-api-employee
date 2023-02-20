@@ -47,6 +47,9 @@ Route::middleware(['auth:sanctum','admin'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/my', function (Request $request) {
+        return $request->user();
+    });
     Route::post('/submission', [BalanceEmployeeController::class, 'submission']);
     Route::post('/history', [BalanceEmployeeController::class, 'history']);
     Route::post('/biodata', [ProfileController::class, 'biodata']);

@@ -12,7 +12,8 @@ class UsersController extends BaseController
 {
     public function show(Request $request)
     {
-        $data = User::where($request->all())->orderBy('updated_at')->simplePaginate(10);
+        $search = $request->except(['page']);
+        $data = User::where($search)->orderBy('updated_at')->simplePaginate(10);
         return $this->sendResponse($data, 'Success get data');
     }
     public function find($email)
@@ -69,10 +70,13 @@ class UsersController extends BaseController
         }
 
 
-        if ($request->passowrd) {
+        if (trim($request->password)) {
             $request['password'] = bcrypt($request['password']);
+            $data = $request->only(['email','name','role','password']);
+        }else{
+            $data = $request->only(['email','name','role']);
         }
-        $row->update($request->all());
+        $row->update($data);
 
 
         return $this->sendResponse($row->id, 'User updated successfully.');
