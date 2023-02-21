@@ -26,7 +26,6 @@ class ProfileController extends BaseController
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $row->id . ',id',
-            'role' => 'required|in:admin,employee',
 
         ]);
 
@@ -35,10 +34,13 @@ class ProfileController extends BaseController
         }
 
 
-        if ($request->passowrd) {
+        if (trim($request->password)) {
             $request['password'] = bcrypt($request['password']);
+            $data = $request->only(['email','name','password']);
+        }else{
+            $data = $request->only(['email','name']);
         }
-        $row->update($request->all());
+        $row->update($data);
 
 
         return $this->sendResponse($row->id, 'Profile successfully updated.');
@@ -50,7 +52,6 @@ class ProfileController extends BaseController
             return $this->sendError('Warning.', ['error' => ['Employee not found']], 404);
         }
         $validator = Validator::make($request->all(), [
-            'users_id' => 'required|exists:users,id|unique:employee,id,' . $employee->id . '',
             'nip' => 'required|unique:employee,id,' . $employee->id . '|max:20',
             'fullname' => 'required|max:255',
             'gender' => 'required|in:male,female',
@@ -58,7 +59,7 @@ class ProfileController extends BaseController
             'pob' => 'required|max:100',
             'dob' => 'required|date',
             'address' => 'required',
-            'balance' => 'required',
+           
         ]);
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);

@@ -42,7 +42,7 @@ class LeaveBalance extends Model
     public function employee(){
         return $this->belongsTo(Employee::class);
     }
-    public function getDateAttribute(){
+    public function getDateAttribute($value){
         return Carbon::parse($this->dates)->format('d F Y H:i');
     }
     public function getApproveAttribute(){

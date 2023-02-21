@@ -32,7 +32,7 @@ class Employee extends Model
      * @var array
      */
     
-    protected $hidden = ['created_by','updated_by','users','id','users_id'];
+    protected $hidden = ['created_by','updated_by','users','id'];
 
     /**
      * The accessors to append to the model's array form.
@@ -52,5 +52,11 @@ class Employee extends Model
     }
     public function getNameAttribute(){
         return $this->users->name;
+    }
+    public function toDropdown(){
+        return [
+            'id'=>$this->id,
+            'fullname'=>$this->fullname,
+        ];
     }
 }

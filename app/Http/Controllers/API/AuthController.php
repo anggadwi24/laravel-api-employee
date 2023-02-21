@@ -32,4 +32,12 @@ class AuthController extends BaseController
             return $this->sendError('Unauthorize.', ['error'=>'Wrong email or password'],401);
         } 
     }
+    public function logout(Request $request){
+        $user = $request->user();
+      
+        $request->user()->currentAccessToken()->delete();
+        
+        return $this->sendResponse(['data'=>'success'], 'User login successfully.');
+    }
+    
 }

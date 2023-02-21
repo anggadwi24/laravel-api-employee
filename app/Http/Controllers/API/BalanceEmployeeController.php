@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Validator;
 class BalanceEmployeeController extends BaseController
 {
     public function submission(Request $request){
+        $validator = Validator::make($request->all(), [
+      
+            'balance' => 'required|min:3',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        }
         $email = auth()->user()->email;
         $row = Employee::whereRelation('users', 'email', $email)->first();
         if (!$row)
@@ -43,7 +51,8 @@ class BalanceEmployeeController extends BaseController
         $row = Employee::whereRelation('users', 'email', $email)->first();
         if (!$row)
             return $this->sendError('Warning.', ['error' => ['Employee not found']], 422);
-        $data = LeaveBalance::where($request->all())->orderBy('id','desc')->get();
+        $search = $request->except(['page']);
+        $data = LeaveBalance::where($search)->orderBy('id','desc')->simplePaginate(10);
         return $this->sendResponse($data, 'Success get leave balance');
     }
 }

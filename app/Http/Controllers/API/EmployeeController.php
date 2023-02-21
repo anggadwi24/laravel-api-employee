@@ -14,7 +14,15 @@ class EmployeeController extends BaseController
 {
     public function show(Request $request)
     {
-        $data = Employee::where($request->all())->orderBy('updated_at')->simplePaginate(10);
+        $search = $request->except(['page']);
+        $data = Employee::where($search)->orderBy('updated_at')->simplePaginate(10);
+        return $this->sendResponse($data, 'Success get data');
+    }
+    public function dropdown(Request $request)
+    {
+        $data = Employee::where($request->all())->orderBy('fullname')->get()->map(function ($item) {
+            return $item->toDropdown();
+        });
         return $this->sendResponse($data, 'Success get data');
     }
     public function find($email)
@@ -61,7 +69,7 @@ class EmployeeController extends BaseController
             'pob' => 'required|max:100',
             'dob' => 'required|date',
             'address' => 'required',
-            'balance' => 'required',
+           
         ]);
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);

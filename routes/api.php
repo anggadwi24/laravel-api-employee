@@ -24,6 +24,8 @@ Route::post('/login', [AuthController::class, 'index']);
 Route::middleware(['auth:sanctum','admin'])->group(function () {
     Route::post('/employee', [EmployeeController::class, 'store']);
     Route::get('/employee', [EmployeeController::class, 'show']);
+    Route::get('/employee/dropdown', [EmployeeController::class, 'dropdown']);
+
     Route::put('/employee/{email}', [EmployeeController::class, 'update']);
     Route::get('/employee/{email}', [EmployeeController::class, 'find']);
     Route::delete('/employee/{email}', [EmployeeController::class, 'destroy']);
@@ -51,12 +53,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
     Route::post('/submission', [BalanceEmployeeController::class, 'submission']);
-    Route::post('/history', [BalanceEmployeeController::class, 'history']);
+    Route::get('/history', [BalanceEmployeeController::class, 'history']);
     Route::post('/biodata', [ProfileController::class, 'biodata']);
 
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::post('/profile', [ProfileController::class, 'update']);
-
+    Route::get('/logout', [AuthController::class, 'logout']);
 
 
 
